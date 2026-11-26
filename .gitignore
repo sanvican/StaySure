@@ -1,0 +1,16 @@
+.env
+*.env
+!.env.example
+node_modules/
+contracts-project/cache/
+contracts-project/artifacts/
+contracts-project/typechain-types/
+backend/prisma/*.db
+backend/prisma/*.db-journal
+backend/*.db
+*.sqlite3
+backend/private_media/
+frontend/dist/
+.venv/
+.vscode/
+.DS_Store
