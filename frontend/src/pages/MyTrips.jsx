@@ -75,7 +75,7 @@ export default function MyTrips({ user, viewMode = 'traveler' }) {
           <div className="card" key={b.id}>
             <div className="flex-between" style={{ marginBottom: 10 }}>
               <StatusBadge status={b.status} viewMode={viewMode} />
-              <strong>${b.totalPrice} total</strong>
+              <strong>₹{b.totalPrice} total</strong>
             </div>
 
             <h3 style={{ marginBottom: 4 }}>

@@ -14,10 +14,36 @@ export default function HostDashboard({ user, viewMode = 'traveler', initialTab 
       setActiveTab(initialTab);
     }
   }, [initialTab]);
+
+  useEffect(() => {
+    if (
+      activeTab === 'add' &&
+      !form.latitude &&
+      !form.longitude &&
+      typeof navigator !== 'undefined' &&
+      navigator.geolocation
+    ) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setForm((prev) => ({
+            ...prev,
+            latitude: prev.latitude || String(pos.coords.latitude.toFixed(6)),
+            longitude: prev.longitude || String(pos.coords.longitude.toFixed(6)),
+          }));
+        },
+        () => {
+          // Ignore silent auto-detect error; user can still click "Use Current GPS" or type coordinates
+        },
+        { enableHighAccuracy: true, timeout: 8000 }
+      );
+    }
+  }, [activeTab]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [formMsg, setFormMsg] = useState('');
   const [formErr, setFormErr] = useState('');
+  const [gpsLoading, setGpsLoading] = useState(false);
+  const [gpsMsg, setGpsMsg] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
   const [form, setForm] = useState({
@@ -31,9 +57,9 @@ export default function HostDashboard({ user, viewMode = 'traveler', initialTab 
     address: '',
     unitNumber: '',
     building: '',
-    latitude: '37.7749',
-    longitude: '-122.4194',
-    price: '145',
+    latitude: '',
+    longitude: '',
+    price: '5000',
   });
 
   const loadMine = async () => {
@@ -67,22 +93,39 @@ export default function HostDashboard({ user, viewMode = 'traveler', initialTab 
   };
 
   const useBrowserGps = () => {
+    setFormErr('');
+    setGpsMsg('');
     if (!navigator.geolocation) {
       setFormErr('Geolocation is not supported by this browser.');
       return;
     }
+    setGpsLoading(true);
+    const onSuccess = (pos) => {
+      const lat = String(pos.coords.latitude.toFixed(6));
+      const lon = String(pos.coords.longitude.toFixed(6));
+      setForm((prev) => ({
+        ...prev,
+        latitude: lat,
+        longitude: lon,
+      }));
+      setGpsMsg(`✓ GPS locked: ${lat}, ${lon}`);
+      setGpsLoading(false);
+    };
+    const onFinalError = (err) => {
+      setFormErr(`Could not read GPS: ${err.message}. You can enter coordinates manually.`);
+      setGpsLoading(false);
+    };
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setForm((prev) => ({
-          ...prev,
-          latitude: String(pos.coords.latitude.toFixed(6)),
-          longitude: String(pos.coords.longitude.toFixed(6)),
-        }));
+      onSuccess,
+      () => {
+        // Fallback to standard accuracy if high-accuracy times out or is unavailable on desktop
+        navigator.geolocation.getCurrentPosition(onSuccess, onFinalError, {
+          enableHighAccuracy: false,
+          timeout: 8000,
+          maximumAge: 60000,
+        });
       },
-      (err) => {
-        setFormErr(`Could not read GPS: ${err.message}`);
-      },
-      { enableHighAccuracy: true }
+      { enableHighAccuracy: true, timeout: 5000, maximumAge: 30000 }
     );
   };
 
@@ -282,7 +325,7 @@ export default function HostDashboard({ user, viewMode = 'traveler', initialTab 
                       <div className="flex-gap" style={{ marginBottom: 6 }}>
                         <StatusBadge status={prop.status} viewMode={viewMode} />
                         <strong style={{ fontSize: '1.08rem' }}>{prop.name}</strong>
-                        <span className="muted">${prop.price}/night</span>
+                        <span className="muted">₹{prop.price}/night</span>
                       </div>
 
                       <div className="muted">
@@ -458,7 +501,7 @@ export default function HostDashboard({ user, viewMode = 'traveler', initialTab 
                 />
               </div>
               <div>
-                <label htmlFor="prop-price">Nightly Rate ($)</label>
+                <label htmlFor="prop-price">Nightly Rate (₹)</label>
                 <input
                   id="prop-price"
                   type="number"
@@ -589,11 +632,21 @@ export default function HostDashboard({ user, viewMode = 'traveler', initialTab 
                 />
               </div>
               <div>
-                <button type="button" className="btn btn-secondary" onClick={useBrowserGps}>
-                  Use Current GPS
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={useBrowserGps}
+                  disabled={gpsLoading}
+                >
+                  {gpsLoading ? 'Detecting GPS...' : 'Use Current GPS'}
                 </button>
               </div>
             </div>
+            {gpsMsg && (
+              <div className="alert alert-success" style={{ marginBottom: 0 }}>
+                {gpsMsg}
+              </div>
+            )}
 
             <div>
               <button type="submit" className="btn" disabled={submitting}>

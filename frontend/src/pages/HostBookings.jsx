@@ -84,7 +84,7 @@ export default function HostBookings({ user }) {
                     </td>
                     <td>{new Date(b.checkIn).toLocaleDateString()}</td>
                     <td>{new Date(b.checkOut).toLocaleDateString()}</td>
-                    <td><strong>${b.totalPrice}</strong></td>
+                    <td><strong>₹{b.totalPrice}</strong></td>
                     <td>
                       <span
                         className={`badge ${

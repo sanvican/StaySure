@@ -71,7 +71,7 @@ export default function PropertyDetail({ user, viewMode = 'traveler', onSwitchTo
         body: JSON.stringify({ propertyId: id, checkIn, checkOut }),
       });
       setBookingMsg(
-        `Reservation confirmed! Total: $${booking.totalPrice}. Manage it anytime in My Bookings.`
+        `Reservation confirmed! Total: ₹${booking.totalPrice}. Manage it anytime in My Bookings.`
       );
     } catch (err) {
       setBookingErr(err.message);
@@ -426,7 +426,7 @@ export default function PropertyDetail({ user, viewMode = 'traveler', onSwitchTo
           <div className="card">
             <div className="flex-between" style={{ marginBottom: 14 }}>
               <div className="price-tag" style={{ fontSize: '1.45rem' }}>
-                ${property.price} <span>/ night</span>
+                ₹{property.price} <span>/ night</span>
               </div>
               <StatusBadge status={property.status} viewMode={viewMode} />
             </div>
@@ -478,9 +478,9 @@ export default function PropertyDetail({ user, viewMode = 'traveler', onSwitchTo
                     }}
                   >
                     <span>
-                      ${property.price} × {nightsCount} night{nightsCount > 1 ? 's' : ''}
+                      ₹{property.price} × {nightsCount} night{nightsCount > 1 ? 's' : ''}
                     </span>
-                    <strong>${(property.price * nightsCount).toFixed(2)}</strong>
+                    <strong>₹{(property.price * nightsCount).toFixed(2)}</strong>
                   </div>
                 )}
 

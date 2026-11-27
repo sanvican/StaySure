@@ -86,7 +86,7 @@ export default function Listings({ viewMode = 'traveler' }) {
         <input
           type="number"
           min="1"
-          placeholder="Max $/night"
+          placeholder="Max ₹/night"
           value={maxPrice}
           onChange={(e) => setMaxPrice(e.target.value)}
           style={{ width: 135 }}
@@ -193,7 +193,7 @@ export default function Listings({ viewMode = 'traveler' }) {
 
                 <div className="listing-footer">
                   <div className="price-tag">
-                    ${prop.price} <span>/ night</span>
+                    ₹{prop.price} <span>/ night</span>
                   </div>
                   <span style={{ fontSize: '0.84rem', fontWeight: 700, color: 'var(--brand)' }}>
                     View stay →

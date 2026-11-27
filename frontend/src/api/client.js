@@ -54,6 +54,12 @@ export async function apiRequest(path, options = {}) {
     : await response.text();
 
   if (!response.ok) {
+    if (response.status === 401 && token && !path.startsWith('/auth/')) {
+      clearAuthSession();
+      if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
+        window.location.href = '/login';
+      }
+    }
     const message =
       (data && typeof data === 'object' && (data.detail || data.message)) ||
       (typeof data === 'string' && data) ||

@@ -99,7 +99,7 @@ async function main() {
       building: 'Mission Commons',
       latitude: 37.7609,
       longitude: -122.4216,
-      price: 210,
+      price: 8500,
       fingerprint: computePropertyFingerprint('742 Valencia St', '3A', 'Mission Commons'),
       status: 'VERIFIED',
       lastVerifiedAt: new Date(),
@@ -122,7 +122,7 @@ async function main() {
       address: '2100 Chestnut St',
       latitude: 37.8005,
       longitude: -122.4378,
-      price: 165,
+      price: 6500,
       fingerprint: computePropertyFingerprint('2100 Chestnut St', '', ''),
       status: 'PENDING',
     },
@@ -144,7 +144,7 @@ async function main() {
       address: '1050 California St',
       latitude: 37.7919,
       longitude: -122.4119,
-      price: 150,
+      price: 5500,
       fingerprint: computePropertyFingerprint('1050 California St', '', ''),
       status: 'PENDING',
     },
@@ -188,7 +188,7 @@ async function main() {
       address: '88 Timberline Rd',
       latitude: 38.9399,
       longitude: -119.9772,
-      price: 240,
+      price: 9500,
       fingerprint: computePropertyFingerprint('88 Timberline Rd', '', ''),
       status: 'VERIFIED',
       lastVerifiedAt: new Date(),
@@ -209,7 +209,7 @@ async function main() {
       address: '14 Ocean View Way',
       latitude: 37.4636,
       longitude: -122.4286,
-      price: 195,
+      price: 7500,
       fingerprint: computePropertyFingerprint('14 Ocean View Way', '', ''),
       status: 'VERIFIED',
       lastVerifiedAt: new Date(Date.now() - 27 * 24 * 60 * 60 * 1000),
@@ -219,9 +219,9 @@ async function main() {
   // Seed bookings & reviews
   await prisma.booking.createMany({
     data: [
-      { guestId: guest1.id, propertyId: p1.id, checkIn: new Date('2026-10-01'), checkOut: new Date('2026-10-04'), totalPrice: 630, status: 'CONFIRMED' },
-      { guestId: guest1.id, propertyId: p4.id, checkIn: new Date('2026-10-10'), checkOut: new Date('2026-10-12'), totalPrice: 480, status: 'CONFIRMED' },
-      { guestId: guest2.id, propertyId: p4.id, checkIn: new Date('2026-10-15'), checkOut: new Date('2026-10-17'), totalPrice: 480, status: 'CONFIRMED' },
+      { guestId: guest1.id, propertyId: p1.id, checkIn: new Date('2026-10-01'), checkOut: new Date('2026-10-04'), totalPrice: 25500, status: 'CONFIRMED' },
+      { guestId: guest1.id, propertyId: p4.id, checkIn: new Date('2026-10-10'), checkOut: new Date('2026-10-12'), totalPrice: 19000, status: 'CONFIRMED' },
+      { guestId: guest2.id, propertyId: p4.id, checkIn: new Date('2026-10-15'), checkOut: new Date('2026-10-17'), totalPrice: 19000, status: 'CONFIRMED' },
     ],
   });
 
